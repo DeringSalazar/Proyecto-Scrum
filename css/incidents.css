@@ -1,0 +1,10 @@
+.split-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+}
+
+.table-container {
+  background: white;
+  border-radius: 6px;
+}

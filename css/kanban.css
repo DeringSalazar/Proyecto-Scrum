@@ -1,0 +1,10 @@
+.kanban-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.kanban-column {
+  background: #EBECF0;
+  padding: 10px;
+}

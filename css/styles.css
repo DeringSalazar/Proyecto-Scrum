@@ -1,0 +1,31 @@
+:root {
+  --primary: #0E5EAD;
+  --bg-color: #F4F6F9;
+  --sidebar-bg: #091E42;
+  --surface: #FFFFFF;
+  --text-main: #172B4D;
+  --text-muted: #5E6C84;
+  --border: #DFE1E6;
+  --shadow-sm: 0 1px 3px rgba(9,30,66,0.08);
+  --radius-sm: 3px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-color);
+}
+
+.app-container {
+  display: flex;
+  height: 100vh;
+}
+
+.hidden {
+  display: none;
+}

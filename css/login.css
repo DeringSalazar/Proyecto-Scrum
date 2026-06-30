@@ -1,0 +1,14 @@
+.login-screen {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0E5EAD, #0b3f73);
+}
+
+.login-card {
+  background: white;
+  padding: 32px;
+  border-radius: 12px;
+  width: 400px;
+}

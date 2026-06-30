@@ -1,0 +1,12 @@
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.card-metric {
+  background: white;
+  padding: 20px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
