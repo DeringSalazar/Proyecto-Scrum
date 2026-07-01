@@ -1,32 +1,91 @@
-function renderDashboard(){
+function renderDashboard() {
 
-    document.getElementById("dashboard").innerHTML=`
+    let incidents = [];
 
-        <h1>Dashboard</h1>
+    if (typeof Storage !== "undefined" && Storage.getIncidents) {
+        incidents = Storage.getIncidents();
+    }
 
-        <div class="cards">
+    const total = incidents.length;
+    const abiertos = incidents.filter(i => i.status === "Abierto").length;
+    const enProceso = incidents.filter(i => i.status === "En Proceso").length;
+    const resueltos = incidents.filter(i => i.status === "Resuelto").length;
 
-            <div class="card">
-                <h2>Tickets abiertos</h2>
-                <h1>25</h1>
+    const sla = total > 0 ? Math.round((resueltos / total) * 100) : 0;
+
+    let acciones = JSON.parse(localStorage.getItem("acciones_dashboard")) || [
+        { texto: "Se arrastró INC-5 de Resuelto a Abierto", hora: "18:56" },
+        { texto: "Se arrastró INC-1 de En Proceso a Abierto", hora: "18:56" },
+        { texto: "Se actualizó INC-4: estado de Abierto a En Proceso", hora: "20:37" },
+        { texto: "Se devolvió INC-2 a Abierto / En Proceso", hora: "20:36" },
+        { texto: "Se devolvió INC-1 a Abierto / En Proceso", hora: "20:36" }
+    ];
+
+    document.getElementById("dashboard").innerHTML = `
+        <div class="dashboard-header">
+            <h1>Dashboard Operativo de TI</h1>
+            <p>Métricas claves de los incidentes activos en la infraestructura de la empresa.</p>
+        </div>
+
+        <div class="dashboard-cards">
+
+            <div class="dashboard-card card-blue">
+                <h3>INCIDENTES TOTALES</h3>
+                <h2>${total}</h2>
             </div>
 
-            <div class="card">
-                <h2>En proceso</h2>
-                <h1>12</h1>
+            <div class="dashboard-card card-red">
+                <h3>ABIERTOS (OPEN)</h3>
+                <h2>${abiertos}</h2>
             </div>
 
-            <div class="card">
-                <h2>Resueltos</h2>
-                <h1>83</h1>
+            <div class="dashboard-card card-yellow">
+                <h3>EN PROCESO</h3>
+                <h2>${enProceso}</h2>
+            </div>
+
+            <div class="dashboard-card card-green">
+                <h3>RESUELTOS</h3>
+                <h2>${resueltos}</h2>
             </div>
 
         </div>
 
+        <div class="dashboard-grid">
+
+            <div class="dashboard-panel">
+                <div class="panel-title">Porcentaje de Resolución (SLA)</div>
+
+                <div class="sla-wrapper">
+                    <div class="sla-chart"
+                        style="background: conic-gradient(#1769aa 0deg ${sla * 3.6}deg, #e7f0fb ${sla * 3.6}deg 360deg);">
+                        <div class="sla-inner">${sla}%</div>
+                    </div>
+
+                    <p>Incidentes cerrados satisfactoriamente</p>
+                </div>
+            </div>
+
+            <div class="dashboard-panel">
+                <div class="panel-title">Últimas Acciones</div>
+
+                <div class="actions-list">
+                    ${acciones.map(item => `
+                        <div class="action-item">
+                            <div class="action-dot"></div>
+                            <div class="action-content">
+                                <div class="action-text">${item.texto}</div>
+                                <div class="action-time">${item.hora}</div>
+                            </div>
+                        </div>
+                    `).join("")}
+                </div>
+            </div>
+
+        </div>
     `;
 
-    document.getElementById("dashboard").style.display="block";
-    document.getElementById("incidents").style.display="none";
-    document.getElementById("kanban").style.display="none";
-
+    document.getElementById("dashboard").style.display = "block";
+    document.getElementById("incidents").style.display = "none";
+    document.getElementById("kanban").style.display = "none";
 }

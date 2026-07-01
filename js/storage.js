@@ -80,6 +80,5 @@ const Storage = {
 
         localStorage.removeItem("logged");
 
-    }
-
+    }  
 };

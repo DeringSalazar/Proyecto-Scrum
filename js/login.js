@@ -54,13 +54,45 @@ function renderLogin() {
 
 function login() {
 
-    const usuario = document.getElementById("txtUser").value.trim();
+    const usuario = document.getElementById("txtUser").value.trim().toLowerCase();
 
     const password = document.getElementById("txtPass").value.trim();
 
-    if (usuario === "admin" && password === "123") {
+    const usuarios = [
+
+        {
+            usuario: "admin",
+            password: "123",
+            rol: "Administrador"
+        },
+
+        {
+            usuario: "tecnico",
+            password: "123",
+            rol: "Técnico de TI"
+        },
+
+        {
+            usuario: "cliente",
+            password: "123",
+            rol: "Cliente"
+        }
+
+    ];
+
+    const usuarioEncontrado = usuarios.find(function (item) {
+
+        return item.usuario === usuario && item.password === password;
+
+    });
+
+    if (usuarioEncontrado) {
 
         localStorage.setItem("logged", "true");
+
+        localStorage.setItem("usuario", usuarioEncontrado.usuario);
+
+        localStorage.setItem("rol", usuarioEncontrado.rol);
 
         startApp();
 
@@ -77,6 +109,10 @@ function login() {
 function logout() {
 
     localStorage.removeItem("logged");
+
+    localStorage.removeItem("usuario");
+
+    localStorage.removeItem("rol");
 
     location.reload();
 

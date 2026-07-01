@@ -42,25 +42,25 @@ function renderSidebar() {
 
             <button onclick="goDashboard()">
 
-                📊 Dashboard
+                Dashboard
 
             </button>
 
             <button onclick="goIncidents()">
 
-                🎫 Incidentes
+                Incidentes
 
             </button>
 
             <button onclick="goKanban()">
 
-                📋 Kanban
+                Kanban
 
             </button>
 
             <button onclick="logout()">
 
-                🚪 Cerrar sesión
+                Cerrar sesión
 
             </button>
 
@@ -74,6 +74,8 @@ function renderTopbar() {
 
     document.getElementById("topbar").className = "topbar";
 
+    const rol = localStorage.getItem("rol") || "Usuario";
+
     document.getElementById("topbar").innerHTML = `
 
         <h2>
@@ -84,7 +86,7 @@ function renderTopbar() {
 
         <div class="user">
 
-            Administrador
+            ${rol}
 
         </div>
 

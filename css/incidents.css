@@ -1,200 +1,257 @@
-.incidents-page{
+/* ===== REGISTRO E INVENTARIO DE INCIDENTES ===== */
 
-padding:30px;
-
-display:flex;
-
-flex-direction:column;
-
-gap:20px;
-
+#incidents {
+    padding: 0;
+    background: #f4f6fa;
 }
 
-.page-header{
-
-display:flex;
-
-justify-content:space-between;
-
-align-items:center;
-
+.incidents-header h1 {
+    margin: 0;
+    font-size: 25px;
+    font-weight: 700;
+    color: #1c3557;
 }
 
-.page-header h1{
-
-font-size:28px;
-
-color:#172B4D;
-
+.incidents-header p {
+    margin-top: 8px;
+    margin-bottom: 24px;
+    font-size: 15px;
+    color: #6b7280;
 }
 
-.page-header p{
-
-color:#6B778C;
-
+.incidents-layout {
+    display: grid;
+    grid-template-columns: 415px 1fr;
+    gap: 20px;
+    align-items: start;
 }
 
-.btn-primary{
+/* FORMULARIO */
 
-background:#0052CC;
-
-color:white;
-
-border:none;
-
-padding:12px 20px;
-
-border-radius:6px;
-
-cursor:pointer;
-
-font-weight:bold;
-
+.incident-form-card {
+    background: #ffffff;
+    border: 1px solid #dfe3eb;
+    border-radius: 8px;
+    padding: 22px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
 }
 
-.btn-primary:hover{
-
-background:#0747A6;
-
+.incident-form-card h2 {
+    margin: 0 0 18px;
+    font-size: 17px;
+    font-weight: 700;
+    color: #1c3557;
 }
 
-.toolbar{
-
-display:flex;
-
-gap:15px;
-
+.incident-form-card label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
 }
 
-.toolbar input,
-.toolbar select{
-
-padding:10px;
-
-border:1px solid #CCC;
-
-border-radius:6px;
-
+.incident-form-card input,
+.incident-form-card select,
+.incident-form-card textarea {
+    width: 100%;
+    border: 1px solid #d9dde7;
+    background: #f5f7fb;
+    border-radius: 4px;
+    padding: 12px 13px;
+    font-size: 14px;
+    font-family: inherit;
+    color: #1f2937;
+    outline: none;
 }
 
-.incident-table{
-
-width:100%;
-
-border-collapse:collapse;
-
-background:white;
-
-box-shadow:0 4px 15px rgba(0,0,0,.08);
-
+.incident-form-card input:focus,
+.incident-form-card select:focus,
+.incident-form-card textarea:focus {
+    border-color: #1769aa;
+    background: #ffffff;
 }
 
-.incident-table th{
-
-background:#091E42;
-
-color:white;
-
-padding:15px;
-
-text-align:left;
-
+.incident-form-card textarea {
+    height: 84px;
+    resize: vertical;
 }
 
-.incident-table td{
-
-padding:15px;
-
-border-bottom:1px solid #EEE;
-
+.btn-register {
+    margin-top: 15px;
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 4px;
+    background: #1769aa;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
 }
 
-.incident-table tr:hover{
-
-background:#F7F9FC;
-
+.btn-register:hover {
+    background: #0f5b96;
 }
 
-.priority{
+/* FILTROS */
 
-padding:6px 12px;
-
-border-radius:20px;
-
-color:white;
-
-font-size:13px;
-
+.incident-table-section {
+    min-width: 0;
 }
 
-.high{
-
-background:#DE350B;
-
+.incident-filters {
+    background: #ffffff;
+    border: 1px solid #dfe3eb;
+    border-radius: 8px;
+    padding: 14px 16px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+    display: grid;
+    grid-template-columns: 1fr 165px 185px;
+    gap: 12px;
+    margin-bottom: 18px;
 }
 
-.medium{
-
-background:#FFAB00;
-
+.incident-filters input,
+.incident-filters select {
+    width: 100%;
+    height: 36px;
+    border: 1px solid #d9dde7;
+    border-radius: 4px;
+    background: #ffffff;
+    padding: 0 12px;
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
 }
 
-.low{
-
-background:#36B37E;
-
+.incident-filters input:focus,
+.incident-filters select:focus {
+    border-color: #1769aa;
 }
 
-.status{
+/* TABLA */
 
-padding:6px 12px;
-
-border-radius:20px;
-
-color:white;
-
-font-size:13px;
-
+.incident-table-card {
+    background: #ffffff;
+    border: 1px solid #dfe3eb;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
 }
 
-.open{
-
-background:#DE350B;
-
+.incident-table {
+    width: 100%;
+    border-collapse: collapse;
 }
 
-.progress{
-
-background:#0052CC;
-
+.incident-table thead {
+    background: #f3f5f9;
 }
 
-.closed{
-
-background:#36B37E;
-
+.incident-table th {
+    padding: 15px 16px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+    border-bottom: 1px solid #dfe3eb;
 }
 
-.incident-table button{
-
-padding:8px 12px;
-
-margin-right:5px;
-
-cursor:pointer;
-
-border:none;
-
-border-radius:5px;
-
-background:#0052CC;
-
-color:white;
-
+.incident-table td {
+    padding: 15px 16px;
+    font-size: 14px;
+    color: #1f2937;
+    border-bottom: 1px solid #edf0f4;
+    vertical-align: middle;
 }
 
-.incident-table button:last-child{
+.incident-table tr:last-child td {
+    border-bottom: none;
+}
 
-background:#DE350B;
+.incident-id {
+    font-weight: 700;
+    color: #6b7280;
+}
 
+.incident-title {
+    color: #1769aa;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+/* PRIORIDAD */
+
+.priority-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 8px;
+}
+
+.priority-critical {
+    background: #e23419;
+}
+
+.priority-high {
+    background: #ff4b2b;
+}
+
+.priority-medium {
+    background: #ffb300;
+}
+
+.priority-low {
+    background: #15956b;
+}
+
+/* ESTADOS */
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 9px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.status-open {
+    background: #fff0ec;
+    color: #df4b1b;
+}
+
+.status-progress {
+    background: #fff8d7;
+    color: #e0a600;
+}
+
+.status-resolved {
+    background: #ddfaec;
+    color: #15956b;
+}
+
+.empty-table {
+    text-align: center;
+    color: #6b7280;
+    padding: 30px !important;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1100px) {
+
+    .incidents-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .incident-filters {
+        grid-template-columns: 1fr;
+    }
 }
