@@ -1,61 +1,82 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ITSM Service Desk</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- CSS modular -->
-  <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/login.css">
-  <link rel="stylesheet" href="css/dashboard.css">
-  <link rel="stylesheet" href="css/incidents.css">
-  <link rel="stylesheet" href="css/kanban.css">
-  <link rel="stylesheet" href="css/scrum.css">
-  <link rel="stylesheet" href="css/modal.css">
+    <title>ITSM Service Desk</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/incidents.css">
+    <link rel="stylesheet" href="css/kanban.css">
+    <link rel="stylesheet" href="css/modal.css">
+
 </head>
 
 <body>
 
-  <!-- LOGIN -->
-  <div id="login-screen"></div>
+    <!-- LOGIN -->
+    <div id="login-screen"></div>
 
-  <!-- APP -->
-  <div class="app-container hidden" id="app-container">
+    <!-- SISTEMA -->
+    <div id="app" class="app-container hidden">
 
-    <aside class="sidebar" id="sidebar"></aside>
+        <!-- SIDEBAR -->
+        <aside id="sidebar" class="sidebar"></aside>
 
-    <main class="main-layout">
+        <!-- CONTENIDO -->
+        <main class="main-layout">
 
-      <header class="topbar" id="topbar"></header>
+            <!-- TOPBAR -->
+            <header id="topbar" class="topbar"></header>
 
-      <div class="content-viewport" id="viewport">
-        <section id="dashboard" class="app-section active"></section>
-        <section id="incidents" class="app-section"></section>
-        <section id="kanban" class="app-section"></section>
-        <section id="scrum-context" class="app-section"></section>
-      </div>
+            <!-- CONTENIDO PRINCIPAL -->
+            <div class="content">
 
-    </main>
-  </div>
+                <section id="dashboard" class="page"></section>
 
-  <!-- MODAL -->
-  <div id="modal-detail"></div>
+                <section id="incidents" class="page" style="display:none;"></section>
 
-  <!-- TOAST -->
-  <div id="toast-box"></div>
+                <section id="kanban" class="page" style="display:none;"></section>
 
-  <!-- JS modular -->
-  <script src="js/storage.js"></script>
-  <script src="js/utils.js"></script>
-  <script src="js/login.js"></script>
-  <script src="js/dashboard.js"></script>
-  <script src="js/incidents.js"></script>
-  <script src="js/kanban.js"></script>
-  <script src="js/modal.js"></script>
-  <script src="js/app.js"></script>
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- MODAL -->
+    <div id="modal-container"></div>
+
+    <!-- TOAST -->
+    <div id="toast-container"></div>
+
+    <!-- JAVASCRIPT -->
+
+    <script src="js/storage.js"></script>
+
+    <script src="js/utils.js"></script>
+
+    <script src="js/login.js"></script>
+
+    <script src="js/dashboard.js"></script>
+
+    <script src="js/incidents.js"></script>
+
+    <script src="js/kanban.js"></script>
+
+    <script src="js/modal.js"></script>
+
+    <script src="js/app.js"></script>
 
 </body>
+
 </html>

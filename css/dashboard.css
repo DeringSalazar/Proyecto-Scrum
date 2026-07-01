@@ -1,12 +1,155 @@
-.metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
+.dashboard{
+
+padding:30px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:25px;
+
 }
 
-.card-metric {
-  background: white;
-  padding: 20px;
-  border-radius: 6px;
-  border: 1px solid var(--border);
+.page-title h1{
+
+font-size:30px;
+
+color:#172B4D;
+
+}
+
+.page-title p{
+
+color:#6B778C;
+
+margin-top:5px;
+
+}
+
+.cards{
+
+display:grid;
+
+grid-template-columns:repeat(4,1fr);
+
+gap:20px;
+
+}
+
+.card{
+
+background:white;
+
+padding:25px;
+
+border-radius:10px;
+
+box-shadow:0 5px 20px rgba(0,0,0,.08);
+
+transition:.3s;
+
+}
+
+.card:hover{
+
+transform:translateY(-5px);
+
+}
+
+.card h3{
+
+font-size:15px;
+
+color:#6B778C;
+
+margin-bottom:10px;
+
+}
+
+.card h2{
+
+font-size:34px;
+
+color:#0052CC;
+
+}
+
+.dashboard-row{
+
+display:grid;
+
+grid-template-columns:2fr 1fr;
+
+gap:20px;
+
+}
+
+.panel{
+
+background:white;
+
+padding:25px;
+
+border-radius:10px;
+
+box-shadow:0 5px 20px rgba(0,0,0,.08);
+
+}
+
+.activity{
+
+list-style:none;
+
+margin-top:15px;
+
+}
+
+.activity li{
+
+padding:12px 0;
+
+border-bottom:1px solid #EEE;
+
+}
+
+.status{
+
+margin-top:20px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:15px;
+
+}
+
+.status-bar{
+
+padding:12px;
+
+color:white;
+
+font-weight:bold;
+
+border-radius:6px;
+
+}
+
+.green{
+
+background:#36B37E;
+
+}
+
+.yellow{
+
+background:#FFAB00;
+
+}
+
+.red{
+
+background:#DE350B;
+
 }

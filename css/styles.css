@@ -1,31 +1,363 @@
-:root {
-  --primary: #0E5EAD;
-  --bg-color: #F4F6F9;
-  --sidebar-bg: #091E42;
-  --surface: #FFFFFF;
-  --text-main: #172B4D;
-  --text-muted: #5E6C84;
-  --border: #DFE1E6;
-  --shadow-sm: 0 1px 3px rgba(9,30,66,0.08);
-  --radius-sm: 3px;
+:root{
+
+    --primary:#0066cc;
+    --primary-dark:#004d99;
+
+    --sidebar:#1f2937;
+    --sidebar-hover:#374151;
+
+    --background:#f3f4f6;
+    --surface:#ffffff;
+
+    --text:#1f2937;
+    --text-light:#6b7280;
+
+    --border:#d1d5db;
+
+    --success:#16a34a;
+    --warning:#f59e0b;
+    --danger:#dc2626;
+
+    --radius:8px;
+
+    --shadow:0 3px 12px rgba(0,0,0,.08);
+
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+*{
+
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+
 }
 
-body {
-  font-family: 'Inter', sans-serif;
-  background: var(--bg-color);
+html{
+
+    height:100%;
+
 }
 
-.app-container {
-  display: flex;
-  height: 100vh;
+body{
+
+    height:100%;
+    font-family:'Inter',sans-serif;
+    background:var(--background);
+    color:var(--text);
+
 }
 
-.hidden {
-  display: none;
+.hidden{
+
+    display:none !important;
+
+}
+
+/*=============================
+APP
+=============================*/
+
+#app{
+
+    display:flex;
+    width:100%;
+    height:100vh;
+
+}
+
+/*=============================
+SIDEBAR
+=============================*/
+
+.sidebar{
+
+    width:260px;
+    background:var(--sidebar);
+    color:white;
+
+    display:flex;
+    flex-direction:column;
+
+    box-shadow:var(--shadow);
+
+}
+
+.logo{
+
+    padding:25px;
+
+    font-size:24px;
+    font-weight:700;
+
+    text-align:center;
+
+    border-bottom:1px solid rgba(255,255,255,.1);
+
+}
+
+.menu{
+
+    display:flex;
+    flex-direction:column;
+
+    margin-top:20px;
+
+}
+
+.menu button{
+
+    background:none;
+
+    border:none;
+
+    color:white;
+
+    text-align:left;
+
+    padding:18px 25px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    transition:.25s;
+
+}
+
+.menu button:hover{
+
+    background:var(--sidebar-hover);
+
+}
+
+.menu button.active{
+
+    background:var(--primary);
+
+}
+
+/*=============================
+MAIN
+=============================*/
+
+.main{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+/*=============================
+TOPBAR
+=============================*/
+
+.topbar{
+
+    height:70px;
+
+    background:white;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:0 30px;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+.topbar h2{
+
+    font-size:22px;
+
+}
+
+.user{
+
+    font-weight:600;
+
+}
+
+/*=============================
+CONTENT
+=============================*/
+
+#content{
+
+    flex:1;
+
+    overflow:auto;
+
+    padding:30px;
+
+}
+
+/*=============================
+CARDS
+=============================*/
+
+.cards{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+    gap:20px;
+
+}
+
+.card{
+
+    background:white;
+
+    padding:25px;
+
+    border-radius:var(--radius);
+
+    box-shadow:var(--shadow);
+
+}
+
+.card h3{
+
+    color:var(--text-light);
+
+    font-size:14px;
+
+    margin-bottom:10px;
+
+}
+
+.card h1{
+
+    font-size:34px;
+
+}
+
+/*=============================
+TABLE
+=============================*/
+
+table{
+
+    width:100%;
+
+    margin-top:25px;
+
+    border-collapse:collapse;
+
+    background:white;
+
+    box-shadow:var(--shadow);
+
+}
+
+th{
+
+    background:#f9fafb;
+
+    padding:15px;
+
+    text-align:left;
+
+}
+
+td{
+
+    padding:15px;
+
+    border-top:1px solid var(--border);
+
+}
+
+/*=============================
+BUTTONS
+=============================*/
+
+.btn{
+
+    background:var(--primary);
+
+    color:white;
+
+    border:none;
+
+    padding:12px 20px;
+
+    border-radius:6px;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+.btn:hover{
+
+    background:var(--primary-dark);
+
+}
+
+/*=============================
+INPUTS
+=============================*/
+
+input,
+select,
+textarea{
+
+    width:100%;
+
+    padding:12px;
+
+    border:1px solid var(--border);
+
+    border-radius:6px;
+
+    margin-bottom:15px;
+
+    font-size:15px;
+
+}
+
+/*=============================
+BADGES
+=============================*/
+
+.badge{
+
+    padding:6px 12px;
+
+    border-radius:20px;
+
+    color:white;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+.badge.open{
+
+    background:var(--danger);
+
+}
+
+.badge.progress{
+
+    background:var(--warning);
+
+}
+
+.badge.closed{
+
+    background:var(--success);
+
 }

@@ -1,14 +1,33 @@
-function saveIncident(event) {
-  event.preventDefault();
+function renderIncidents(){
 
-  const inc = {
-    id: "INC-" + (incidentes.length + 1),
-    titulo: titulo.value,
-    descripcion: descripcion.value,
-    estado: "Abierto"
-  };
+    document.getElementById("incidents").innerHTML=`
 
-  incidentes.push(inc);
-  saveToStorage();
-  showToast("Incidente creado");
+        <h1>Incidentes</h1>
+
+        <table class="incident-table">
+
+            <tr>
+
+                <th>ID</th>
+                <th>Título</th>
+                <th>Estado</th>
+
+            </tr>
+
+            <tr>
+
+                <td>INC001</td>
+                <td>Sin Internet</td>
+                <td>Abierto</td>
+
+            </tr>
+
+        </table>
+
+    `;
+
+    document.getElementById("dashboard").style.display="none";
+    document.getElementById("incidents").style.display="block";
+    document.getElementById("kanban").style.display="none";
+
 }
