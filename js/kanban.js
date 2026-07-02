@@ -1,41 +1,8 @@
 function renderKanban() {
 
-    let incidents = JSON.parse(localStorage.getItem("incidents")) || [];
+    Storage.ensureSeedIncidents();
 
-    if (incidents.length === 0) {
-        incidents = [
-            {
-                id: "INC-1",
-                title: "Fallo de conexión VPN - Sucursal Central",
-                description: "Los usuarios informan que no se pueden conectar mediante túneles IPsec. Sin acceso al ERP.",
-                type: "Red",
-                priority: "Crítica",
-                assigned: "Carlos R. (Redes)",
-                status: "Abierto"
-            },
-            {
-                id: "INC-2",
-                title: "Error crítico en base de datos - Licitaciones",
-                description: "Tardanza en el procesamiento de transacciones. Sospecha de bloqueos cruzados en tabla central.",
-                type: "Sistemas",
-                priority: "Alta",
-                assigned: "Diana M. (Sistemas)",
-                status: "En Proceso"
-            },
-            {
-                id: "INC-3",
-                title: "Pantalla azul en PC de gerencia de finanzas",
-                description: "Fallo repetitivo de memoria RAM en el computador corporativo de la gerencia.",
-                type: "Hardware",
-                priority: "Media",
-                assigned: "Fabián T. (Soporte)",
-                status: "Resuelto"
-            }
-        ];
-
-        localStorage.setItem("incidents", JSON.stringify(incidents));
-    }
-
+    const incidents = Storage.getVisibleIncidentsForCurrentUser();
     const abiertos = incidents.filter(incident => incident.status === "Abierto");
     const enProceso = incidents.filter(incident => incident.status === "En Proceso");
     const resueltos = incidents.filter(incident => incident.status === "Resuelto");
@@ -142,38 +109,29 @@ function dropIncident(event, newStatus) {
 
     const id = event.dataTransfer.getData("incidentId");
 
-    updateIncidentStatusKanban(id, newStatus);
+    const updated = updateIncidentStatusKanban(id, newStatus);
 
-    renderKanban();
+    if (updated) {
+        renderKanban();
+    }
 }
 
 function updateIncidentStatusKanban(id, newStatus) {
 
-    let incidents = JSON.parse(localStorage.getItem("incidents")) || [];
+    const result = Storage.patchIncidentEstado(id, newStatus);
 
-    incidents = incidents.map(incident => {
-
-        if (incident.id === id) {
-
-            return {
-                ...incident,
-                status: newStatus
-            };
-
-        }
-
-        return incident;
-    });
-
-    localStorage.setItem("incidents", JSON.stringify(incidents));
+    if (!result.success) {
+        showToast(result.message, "error");
+        return false;
+    }
 
     saveKanbanAction(id, newStatus);
+    return true;
 }
 
 function moveIncidentRight(id) {
 
-    const incidents = JSON.parse(localStorage.getItem("incidents")) || [];
-
+    const incidents = Storage.getIncidents();
     const incident = incidents.find(item => item.id === id);
 
     if (!incident) return;
@@ -189,8 +147,7 @@ function moveIncidentRight(id) {
 
 function moveIncidentLeft(id) {
 
-    const incidents = JSON.parse(localStorage.getItem("incidents")) || [];
-
+    const incidents = Storage.getIncidents();
     const incident = incidents.find(item => item.id === id);
 
     if (!incident) return;

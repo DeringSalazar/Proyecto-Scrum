@@ -1,50 +1,15 @@
 function renderIncidents() {
 
-    let incidents = JSON.parse(localStorage.getItem("incidents")) || [];
+    Storage.ensureSeedIncidents();
 
-    if (incidents.length === 0) {
-
-        incidents = [
-            {
-                id: "INC-1",
-                title: "Fallo de conexión VPN - Sucursal Central",
-                description: "Los usuarios informan que no se pueden conectar mediante túneles IPsec. Sin acceso al ERP.",
-                type: "Red",
-                priority: "Crítica",
-                assigned: "Carlos R. (Redes)",
-                status: "Abierto",
-                date: "2026-06-30T21:53"
-            },
-            {
-                id: "INC-2",
-                title: "Error crítico en base de datos - Licitaciones",
-                description: "Tardanza en el procesamiento de transacciones.",
-                type: "Sistemas",
-                priority: "Alta",
-                assigned: "Diana M. (Sistemas)",
-                status: "En Proceso",
-                date: "2026-06-30T21:53"
-            },
-            {
-                id: "INC-3",
-                title: "Pantalla azul en PC de gerencia de finanzas",
-                description: "Fallo repetitivo de memoria RAM.",
-                type: "Hardware",
-                priority: "Media",
-                assigned: "Fabián T. (Soporte)",
-                status: "Resuelto",
-                date: "2026-06-30T21:53"
-            }
-        ];
-
-        localStorage.setItem("incidents", JSON.stringify(incidents));
-    }
+    const incidents = Storage.getVisibleIncidentsForCurrentUser();
+    const canAssign = Storage.isTecnico() || Storage.isAdmin();
 
     document.getElementById("incidents").innerHTML = `
 
         <div class="incidents-header">
             <h1>Registro e Inventario de Incidentes</h1>
-            <p>Reportar nuevas fallas de infraestructura y consultar el histórico completo.</p>
+            <p>${canAssign ? "Gestiona incidentes, asignaciones y cambios de estado desde aquí." : "Solo verás los incidentes que reportaste."}</p>
         </div>
 
         <div class="incidents-layout">
@@ -84,7 +49,7 @@ function renderIncidents() {
                 </select>
 
                 <label>Asignar técnico</label>
-                <select id="incident-assigned">
+                <select id="incident-assigned" ${canAssign ? "" : "disabled"}>
                     <option>Sin Asignar</option>
                     <option>Carlos R. (Redes)</option>
                     <option>Diana M. (Sistemas)</option>
@@ -144,6 +109,7 @@ function renderIncidents() {
                                 <th>Prioridad</th>
                                 <th>Asignado</th>
                                 <th>Estado</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
 
@@ -170,7 +136,7 @@ function buildIncidentRows(incidents) {
     if (incidents.length === 0) {
         return `
             <tr>
-                <td colspan="6" class="empty-table">
+                <td colspan="7" class="empty-table">
                     No hay incidentes registrados.
                 </td>
             </tr>
@@ -210,9 +176,28 @@ function buildIncidentRows(incidents) {
                 </span>
             </td>
 
+            <td>
+                ${getIncidentActionButtons(incident)}
+            </td>
+
         </tr>
 
     `).join("");
+}
+
+function getIncidentActionButtons(incident) {
+
+    const canAssign = Storage.isTecnico() || Storage.isAdmin();
+
+    if (!canAssign) {
+        return "-";
+    }
+
+    if (incident.assigned && incident.assigned !== "Sin Asignar") {
+        return `<span>${incident.assigned}</span>`;
+    }
+
+    return `<button class="btn-register" onclick="autoAssignIncident('${incident.id}')">Auto asignarme</button>`;
 }
 
 function addIncident() {
@@ -234,7 +219,7 @@ function addIncident() {
         return;
     }
 
-    const incidents = JSON.parse(localStorage.getItem("incidents")) || [];
+    const currentUser = Storage.getCurrentUserSession();
 
     const newIncident = {
         id: getNextIncidentId(),
@@ -244,13 +229,29 @@ function addIncident() {
         priority: priority,
         assigned: assigned,
         status: "Abierto",
-        date: date
+        date: date,
+        reportadoPor: currentUser.nombre,
+        reportadoPorUsuario: currentUser.usuario,
+        historial_estados: [],
+        notificaciones: []
     };
 
-    incidents.push(newIncident);
+    Storage.addIncident(newIncident);
+    showToast("Incidente registrado correctamente.");
+    clearInputs("incident-title", "incident-description");
+    renderIncidents();
+}
 
-    localStorage.setItem("incidents", JSON.stringify(incidents));
+function autoAssignIncident(id) {
 
+    const result = Storage.patchIncidentAsignar(id);
+
+    if (!result.success) {
+        showToast(result.message, "error");
+        return;
+    }
+
+    showToast(result.message);
     renderIncidents();
 }
 
@@ -260,7 +261,7 @@ function filterIncidents() {
     const status = document.getElementById("filter-status").value;
     const priority = document.getElementById("filter-priority").value;
 
-    let incidents = JSON.parse(localStorage.getItem("incidents")) || [];
+    let incidents = Storage.getVisibleIncidentsForCurrentUser();
 
     incidents = incidents.filter(incident => {
 
@@ -283,7 +284,7 @@ function filterIncidents() {
 
 function getNextIncidentId() {
 
-    const incidents = JSON.parse(localStorage.getItem("incidents")) || [];
+    const incidents = Storage.getIncidents();
 
     if (incidents.length === 0) {
         return "INC-1";

@@ -35,15 +35,11 @@ function renderLogin() {
             >
 
             <button onclick="login()">
-
                 Iniciar Sesión
-
             </button>
 
             <div class="login-footer">
-
                 ITSM Service Desk © 2026
-
             </div>
 
         </div>
@@ -55,7 +51,6 @@ function renderLogin() {
 function login() {
 
     const usuario = document.getElementById("txtUser").value.trim().toLowerCase();
-
     const password = document.getElementById("txtPass").value.trim();
 
     const usuarios = [
@@ -63,36 +58,50 @@ function login() {
         {
             usuario: "admin",
             password: "123",
-            rol: "Administrador"
+            rol: "Administrador",
+            nombre: "Administrador"
         },
 
         {
-            usuario: "tecnico",
+            usuario: "carlos",
             password: "123",
-            rol: "Técnico de TI"
+            rol: "Técnico de TI",
+            nombre: "Carlos R. (Redes)"
+        },
+
+        {
+            usuario: "diana",
+            password: "123",
+            rol: "Técnico de TI",
+            nombre: "Diana M. (Sistemas)"
+        },
+
+        {
+            usuario: "fabian",
+            password: "123",
+            rol: "Técnico de TI",
+            nombre: "Fabián T. (Soporte)"
         },
 
         {
             usuario: "cliente",
             password: "123",
-            rol: "Cliente"
+            rol: "Cliente",
+            nombre: "Cliente"
         }
 
     ];
 
-    const usuarioEncontrado = usuarios.find(function (item) {
-
-        return item.usuario === usuario && item.password === password;
-
-    });
+    const usuarioEncontrado = usuarios.find(item =>
+        item.usuario === usuario && item.password === password
+    );
 
     if (usuarioEncontrado) {
 
         localStorage.setItem("logged", "true");
-
         localStorage.setItem("usuario", usuarioEncontrado.usuario);
-
         localStorage.setItem("rol", usuarioEncontrado.rol);
+        localStorage.setItem("nombre", usuarioEncontrado.nombre);
 
         startApp();
 
@@ -109,10 +118,9 @@ function login() {
 function logout() {
 
     localStorage.removeItem("logged");
-
     localStorage.removeItem("usuario");
-
     localStorage.removeItem("rol");
+    localStorage.removeItem("nombre");
 
     location.reload();
 

@@ -14,6 +14,10 @@ window.onload = () => {
 
 function startApp() {
 
+    if (typeof Storage !== "undefined" && Storage.ensureSeedIncidents) {
+        Storage.ensureSeedIncidents();
+    }
+
     document.getElementById("login-screen").classList.add("hidden");
 
     document.getElementById("app").classList.remove("hidden");

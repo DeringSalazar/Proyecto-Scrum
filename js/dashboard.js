@@ -2,7 +2,9 @@ function renderDashboard() {
 
     let incidents = [];
 
-    if (typeof Storage !== "undefined" && Storage.getIncidents) {
+    if (typeof Storage !== "undefined" && Storage.getVisibleIncidentsForCurrentUser) {
+        incidents = Storage.getVisibleIncidentsForCurrentUser();
+    } else if (typeof Storage !== "undefined" && Storage.getIncidents) {
         incidents = Storage.getIncidents();
     }
 
@@ -10,6 +12,9 @@ function renderDashboard() {
     const abiertos = incidents.filter(i => i.status === "Abierto").length;
     const enProceso = incidents.filter(i => i.status === "En Proceso").length;
     const resueltos = incidents.filter(i => i.status === "Resuelto").length;
+    const pendientes = typeof Storage !== "undefined" && Storage.getIncidentesPendientes
+        ? Storage.getIncidentesPendientes()
+        : [];
 
     const sla = total > 0 ? Math.round((resueltos / total) * 100) : 0;
 
@@ -63,6 +68,22 @@ function renderDashboard() {
                     </div>
 
                     <p>Incidentes cerrados satisfactoriamente</p>
+                </div>
+            </div>
+
+            <div class="dashboard-panel">
+                <div class="panel-title">Incidentes Pendientes</div>
+
+                <div class="actions-list">
+                    ${pendientes.length === 0 ? '<div class="action-item"><div class="action-content"><div class="action-text">No hay incidentes sin técnico asignado.</div></div></div>' : pendientes.map(item => `
+                        <div class="action-item">
+                            <div class="action-dot"></div>
+                            <div class="action-content">
+                                <div class="action-text">${item.id} - ${item.title}</div>
+                                <div class="action-time">Estado: ${item.status}</div>
+                            </div>
+                        </div>
+                    `).join("")}
                 </div>
             </div>
 
