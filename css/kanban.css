@@ -1,8 +1,10 @@
 /* ===== TABLERO KANBAN ===== */
 
 #kanban {
-    padding: 0;
+    padding: 30px 24px;
     background: #f4f6fa;
+    min-height: calc(100vh - 68px);
+    box-sizing: border-box;
 }
 
 .kanban-page-header h1 {
@@ -86,16 +88,17 @@
     margin-bottom: 12px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
     border-left: 4px solid #dfe3eb;
-    cursor: grab;
-}
-
-.kanban-card:active {
-    cursor: grabbing;
+    cursor: pointer;
+    transition: 0.2s ease;
 }
 
 .kanban-card:hover {
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
     transform: translateY(-1px);
+}
+
+.kanban-card:active {
+    cursor: grabbing;
 }
 
 .kanban-border-red {
@@ -193,10 +196,213 @@
     padding: 24px 0;
 }
 
+/* =====================================================
+   MODAL DETALLE INCIDENTE - KANBAN
+   ===================================================== */
+
+.incident-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(20, 31, 46, 0.55);
+    backdrop-filter: blur(3px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.incident-modal {
+    width: 650px;
+    max-width: 95vw;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.28);
+    overflow: hidden;
+}
+
+.incident-modal-header {
+    padding: 22px 26px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.incident-modal-header h2 {
+    margin: 0;
+    font-size: 22px;
+    color: #1c3557;
+    font-weight: 800;
+}
+
+.incident-modal-header button {
+    border: none;
+    background: transparent;
+    color: #8a94a3;
+    font-size: 30px;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.incident-modal-body {
+    padding: 24px 26px;
+}
+
+.modal-field {
+    margin-bottom: 18px;
+}
+
+.modal-field label {
+    display: block;
+    margin-bottom: 8px;
+    color: #64748b;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.modal-field h3 {
+    margin: 0;
+    color: #1c3557;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.modal-field p {
+    margin: 0;
+    color: #1f2937;
+    font-size: 16px;
+}
+
+.modal-description {
+    background: #f5f7fb;
+    color: #1f2937;
+    padding: 12px 14px;
+    border-radius: 5px;
+    font-size: 16px;
+    line-height: 1.45;
+    font-style: italic;
+}
+
+.modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px 38px;
+}
+
+.modal-full {
+    width: 100%;
+}
+
+.modal-field select {
+    width: 100%;
+    height: 44px;
+    border: 1px solid #d9dde7;
+    border-radius: 5px;
+    padding: 0 12px;
+    background: #ffffff;
+    color: #1f2937;
+    font-size: 16px;
+    outline: none;
+}
+
+.modal-field select:focus {
+    border-color: #1769aa;
+}
+
+.incident-modal-footer {
+    padding: 16px 26px;
+    border-top: 1px solid #e5e7eb;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.modal-footer-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-delete-ticket {
+    border: none;
+    border-radius: 4px;
+    background: #fff0ec;
+    color: #df4b1b;
+    padding: 11px 16px;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.btn-delete-ticket:hover {
+    background: #ffe0d8;
+}
+
+.btn-close-modal {
+    border: none;
+    background: transparent;
+    color: #111827;
+    padding: 11px 12px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.btn-save-modal {
+    border: none;
+    border-radius: 4px;
+    background: #1769aa;
+    color: #ffffff;
+    padding: 11px 18px;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.btn-save-modal:hover {
+    background: #0f5b96;
+}
+
 /* RESPONSIVE */
 
 @media (max-width: 1100px) {
     .kanban-board {
         grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 700px) {
+    #kanban {
+        padding: 24px 16px;
+    }
+
+    .incident-modal {
+        width: 100%;
+    }
+
+    .modal-grid {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .incident-modal-footer {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+
+    .modal-footer-actions {
+        justify-content: flex-end;
+    }
+
+    .btn-delete-ticket,
+    .btn-save-modal,
+    .btn-close-modal {
+        width: 100%;
     }
 }

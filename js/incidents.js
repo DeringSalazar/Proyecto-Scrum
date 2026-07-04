@@ -95,6 +95,10 @@ function renderIncidents() {
                         <option value="Baja">Baja</option>
                     </select>
 
+                    <button class="btn-refresh" onclick="refreshIncidents()">
+                        Recargar
+                    </button>
+
                 </div>
 
                 <div class="incident-table-card">
@@ -194,10 +198,14 @@ function getIncidentActionButtons(incident) {
     }
 
     if (incident.assigned && incident.assigned !== "Sin Asignar") {
-        return `<span>${incident.assigned}</span>`;
+        return `<span class="assigned-label">${incident.assigned}</span>`;
     }
 
-    return `<button class="btn-register" onclick="autoAssignIncident('${incident.id}')">Auto asignarme</button>`;
+    return `
+        <button class="btn-auto-assign" onclick="autoAssignIncident('${incident.id}')">
+            Auto asignarme
+        </button>
+    `;
 }
 
 function addIncident() {
@@ -206,7 +214,7 @@ function addIncident() {
     const description = document.getElementById("incident-description").value.trim();
     const type = document.getElementById("incident-type").value;
     const priority = document.getElementById("incident-priority").value;
-    const assigned = document.getElementById("incident-assigned").value;
+    const assignedField = document.getElementById("incident-assigned");
     const date = document.getElementById("incident-date").value;
 
     if (title === "" || description === "") {
@@ -221,13 +229,15 @@ function addIncident() {
 
     const currentUser = Storage.getCurrentUserSession();
 
+    const canAssign = Storage.isTecnico() || Storage.isAdmin();
+
     const newIncident = {
         id: getNextIncidentId(),
         title: title,
         description: description,
         type: type,
         priority: priority,
-        assigned: assigned,
+        assigned: canAssign ? assignedField.value : "Sin Asignar",
         status: "Abierto",
         date: date,
         reportadoPor: currentUser.nombre,
@@ -237,8 +247,13 @@ function addIncident() {
     };
 
     Storage.addIncident(newIncident);
+
+    saveIncidentAction(`Se registró ${newIncident.id}: ${newIncident.title}`);
+
     showToast("Incidente registrado correctamente.");
+
     clearInputs("incident-title", "incident-description");
+
     renderIncidents();
 }
 
@@ -251,7 +266,10 @@ function autoAssignIncident(id) {
         return;
     }
 
+    saveIncidentAction(`Se asignó el incidente ${id}`);
+
     showToast(result.message);
+
     renderIncidents();
 }
 
@@ -280,6 +298,31 @@ function filterIncidents() {
     });
 
     document.getElementById("incident-table-body").innerHTML = buildIncidentRows(incidents);
+}
+
+function refreshIncidents() {
+
+    const searchInput = document.getElementById("search-incident");
+    const statusFilter = document.getElementById("filter-status");
+    const priorityFilter = document.getElementById("filter-priority");
+
+    if (searchInput) {
+        searchInput.value = "";
+    }
+
+    if (statusFilter) {
+        statusFilter.value = "";
+    }
+
+    if (priorityFilter) {
+        priorityFilter.value = "";
+    }
+
+    const incidents = Storage.getVisibleIncidentsForCurrentUser();
+
+    document.getElementById("incident-table-body").innerHTML = buildIncidentRows(incidents);
+
+    showToast("Lista de incidentes actualizada.");
 }
 
 function getNextIncidentId() {
@@ -349,4 +392,21 @@ function getStatusClass(status) {
     }
 
     return "";
+}
+
+function saveIncidentAction(text) {
+
+    const actions = JSON.parse(localStorage.getItem("acciones_dashboard")) || [];
+
+    const now = new Date();
+
+    const hour = String(now.getHours()).padStart(2, "0");
+    const minute = String(now.getMinutes()).padStart(2, "0");
+
+    actions.unshift({
+        texto: text,
+        hora: `${hour}:${minute}`
+    });
+
+    localStorage.setItem("acciones_dashboard", JSON.stringify(actions.slice(0, 5)));
 }

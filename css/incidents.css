@@ -1,39 +1,114 @@
-/* ===== REGISTRO E INVENTARIO DE INCIDENTES ===== */
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    background: #f4f6fa;
+}
+
+.app-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    background: #f4f6fa;
+}
+
+
+.sidebar {
+    width: 234px;
+    min-width: 234px;
+    flex-shrink: 0;
+}
+
+
+.main-layout {
+    flex: 1;
+    width: calc(100% - 234px);
+    min-width: 0;
+    margin-left: 0;
+    background: #f4f6fa;
+}
+
+
+.topbar {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+
+.content {
+    width: 100%;
+    max-width: none;
+    min-height: calc(100vh - 68px);
+    padding: 28px 26px;
+    box-sizing: border-box;
+    background: #f4f6fa;
+}
+
+
+.page {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+}
+
 
 #incidents {
+    width: 100%;
+    max-width: none;
+    min-height: calc(100vh - 68px);
     padding: 0;
     background: #f4f6fa;
+    box-sizing: border-box;
+}
+
+
+
+.incidents-header {
+    width: 100%;
+    margin-bottom: 22px;
 }
 
 .incidents-header h1 {
     margin: 0;
-    font-size: 25px;
+    font-size: 26px;
     font-weight: 700;
     color: #1c3557;
 }
 
 .incidents-header p {
     margin-top: 8px;
-    margin-bottom: 24px;
+    margin-bottom: 0;
     font-size: 15px;
     color: #6b7280;
 }
 
+
+
 .incidents-layout {
+    width: 100%;
+    max-width: none;
     display: grid;
-    grid-template-columns: 415px 1fr;
+    grid-template-columns: 380px minmax(0, 1fr);
     gap: 20px;
     align-items: start;
+    box-sizing: border-box;
 }
 
-/* FORMULARIO */
+
 
 .incident-form-card {
+    width: 100%;
+    max-width: none;
     background: #ffffff;
     border: 1px solid #dfe3eb;
     border-radius: 8px;
     padding: 22px;
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
 }
 
 .incident-form-card h2 {
@@ -66,6 +141,7 @@
     font-family: inherit;
     color: #1f2937;
     outline: none;
+    box-sizing: border-box;
 }
 
 .incident-form-card input:focus,
@@ -97,22 +173,28 @@
     background: #0f5b96;
 }
 
-/* FILTROS */
-
 .incident-table-section {
+    width: 100%;
+    max-width: none;
     min-width: 0;
+    box-sizing: border-box;
 }
 
+
 .incident-filters {
+    width: 100%;
+    max-width: none;
     background: #ffffff;
     border: 1px solid #dfe3eb;
     border-radius: 8px;
     padding: 14px 16px;
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
     display: grid;
-    grid-template-columns: 1fr 165px 185px;
+    grid-template-columns: minmax(260px, 1fr) 170px 190px 110px;
     gap: 12px;
     margin-bottom: 18px;
+    align-items: center;
+    box-sizing: border-box;
 }
 
 .incident-filters input,
@@ -126,6 +208,7 @@
     font-size: 14px;
     font-family: inherit;
     outline: none;
+    box-sizing: border-box;
 }
 
 .incident-filters input:focus,
@@ -133,18 +216,41 @@
     border-color: #1769aa;
 }
 
-/* TABLA */
+
+.btn-refresh {
+    height: 36px;
+    border: none;
+    border-radius: 4px;
+    background: #1769aa;
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0 14px;
+    white-space: nowrap;
+}
+
+.btn-refresh:hover {
+    background: #0f5b96;
+}
+
+
 
 .incident-table-card {
+    width: 100%;
+    max-width: none;
     background: #ffffff;
     border: 1px solid #dfe3eb;
     border-radius: 8px;
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
 }
 
 .incident-table {
     width: 100%;
+    min-width: 980px;
     border-collapse: collapse;
 }
 
@@ -160,6 +266,7 @@
     color: #6b7280;
     text-transform: uppercase;
     border-bottom: 1px solid #dfe3eb;
+    white-space: nowrap;
 }
 
 .incident-table td {
@@ -176,7 +283,8 @@
 
 .incident-id {
     font-weight: 700;
-    color: #6b7280;
+    color: #000000;
+    white-space: nowrap;
 }
 
 .incident-title {
@@ -184,8 +292,6 @@
     font-weight: 700;
     line-height: 1.35;
 }
-
-/* PRIORIDAD */
 
 .priority-dot {
     width: 9px;
@@ -211,7 +317,6 @@
     background: #15956b;
 }
 
-/* ESTADOS */
 
 .status-badge {
     display: inline-block;
@@ -220,6 +325,7 @@
     font-size: 12px;
     font-weight: 800;
     text-transform: uppercase;
+    white-space: nowrap;
 }
 
 .status-open {
@@ -237,21 +343,92 @@
     color: #15956b;
 }
 
+
 .empty-table {
     text-align: center;
     color: #6b7280;
     padding: 30px !important;
 }
 
-/* RESPONSIVE */
+
+.btn-auto-assign {
+    border: none;
+    border-radius: 4px;
+    background: #1769aa;
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 7px 10px;
+    white-space: nowrap;
+}
+
+.btn-auto-assign:hover {
+    background: #0f5b96;
+}
+
+.assigned-label {
+    font-size: 13px;
+    color: #6b7280;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+
+@media (max-width: 1300px) {
+
+    .incidents-layout {
+        grid-template-columns: 360px minmax(0, 1fr);
+    }
+
+    .incident-filters {
+        grid-template-columns: minmax(220px, 1fr) 160px 180px 105px;
+    }
+
+    .incident-table {
+        min-width: 920px;
+    }
+}
 
 @media (max-width: 1100px) {
+
+    .content {
+        padding: 24px 20px;
+    }
 
     .incidents-layout {
         grid-template-columns: 1fr;
     }
 
+    .incident-form-card {
+        width: 100%;
+        max-width: none;
+    }
+
     .incident-filters {
         grid-template-columns: 1fr;
+    }
+
+    .btn-refresh {
+        width: 100%;
+    }
+
+    .incident-table {
+        min-width: 850px;
+    }
+}
+
+@media (max-width: 700px) {
+
+    .content {
+        padding: 20px 14px;
+    }
+
+    .incidents-header h1 {
+        font-size: 22px;
+    }
+
+    .incident-table {
+        min-width: 780px;
     }
 }
