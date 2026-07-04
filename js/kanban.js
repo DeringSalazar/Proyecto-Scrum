@@ -5,6 +5,7 @@ function renderKanban() {
     Storage.ensureSeedIncidents();
 
     const incidents = Storage.getVisibleIncidentsForCurrentUser();
+    const canManage = Storage.isTecnico() || Storage.isAdmin();
 
     const abiertos = incidents.filter(incident => incident.status === "Abierto");
     const enProceso = incidents.filter(incident => incident.status === "En Proceso");
@@ -14,14 +15,14 @@ function renderKanban() {
 
         <div class="kanban-page-header">
             <h1>Tablero Kanban de Operaciones</h1>
-            <p>Arrastra y suelta los incidentes para cambiar de estado rápidamente y coordinar la resolución.</p>
+            <p>${canManage ? "Arrastra y suelta los incidentes para cambiar de estado rápidamente y coordinar la resolución." : "Revisa el avance de tus incidentes. Los técnicos y administradores actualizarán su estado."}</p>
         </div>
 
         <div class="kanban-board">
 
-            ${buildKanbanColumn("Abierto", "ABIERTOS (OPEN)", abiertos)}
-            ${buildKanbanColumn("En Proceso", "EN PROCESO", enProceso)}
-            ${buildKanbanColumn("Resuelto", "RESUELTOS", resueltos)}
+            ${buildKanbanColumn("Abierto", "ABIERTOS (OPEN)", abiertos, canManage)}
+            ${buildKanbanColumn("En Proceso", "EN PROCESO", enProceso, canManage)}
+            ${buildKanbanColumn("Resuelto", "RESUELTOS", resueltos, canManage)}
 
         </div>
 
@@ -33,14 +34,13 @@ function renderKanban() {
     document.getElementById("kanban").style.display = "block";
 }
 
-function buildKanbanColumn(status, title, incidents) {
+function buildKanbanColumn(status, title, incidents, canManage) {
 
     return `
 
         <div 
             class="kanban-column"
-            ondragover="allowDrop(event)"
-            ondrop="dropIncident(event, '${status}')"
+            ${canManage ? `ondragover="allowDrop(event)" ondrop="dropIncident(event, '${status}')"` : ""}
         >
 
             <div class="kanban-column-header">
@@ -53,7 +53,7 @@ function buildKanbanColumn(status, title, incidents) {
                 ${
                     incidents.length === 0
                     ? `<div class="kanban-empty">Sin incidentes</div>`
-                    : incidents.map(incident => buildKanbanCard(incident)).join("")
+                    : incidents.map(incident => buildKanbanCard(incident, canManage)).join("")
                 }
 
             </div>
@@ -62,15 +62,19 @@ function buildKanbanColumn(status, title, incidents) {
     `;
 }
 
-function buildKanbanCard(incident) {
+function buildKanbanCard(incident, canManage) {
+
+    const draggableAttr = canManage ? 'draggable="true"' : "";
+    const dragStartAttr = canManage ? `ondragstart="dragIncident(event, '${incident.id}')"` : "";
+    const dragEndAttr = canManage ? 'ondragend="endDragIncident()"' : "";
 
     return `
 
         <div 
             class="kanban-card ${getKanbanBorderClass(incident.status)}"
-            draggable="true"
-            ondragstart="dragIncident(event, '${incident.id}')"
-            ondragend="endDragIncident()"
+            ${draggableAttr}
+            ${dragStartAttr}
+            ${dragEndAttr}
             onclick="openKanbanIncidentModal('${incident.id}')"
         >
 
@@ -92,8 +96,10 @@ function buildKanbanCard(incident) {
                 </span>
 
                 <div class="kanban-actions">
-                    <button onclick="event.stopPropagation(); moveIncidentLeft('${incident.id}')">←</button>
-                    <button onclick="event.stopPropagation(); moveIncidentRight('${incident.id}')">→</button>
+                    ${canManage ? `
+                        <button onclick="event.stopPropagation(); moveIncidentLeft('${incident.id}')">←</button>
+                        <button onclick="event.stopPropagation(); moveIncidentRight('${incident.id}')">→</button>
+                    ` : ""}
                 </div>
 
             </div>
@@ -120,6 +126,10 @@ function allowDrop(event) {
 
 function dropIncident(event, newStatus) {
 
+    if (!Storage.isTecnico() && !Storage.isAdmin()) {
+        return;
+    }
+
     event.preventDefault();
 
     const id = event.dataTransfer.getData("incidentId");
@@ -132,6 +142,10 @@ function dropIncident(event, newStatus) {
 }
 
 function updateIncidentStatusKanban(id, newStatus) {
+
+    if (!Storage.isTecnico() && !Storage.isAdmin()) {
+        return false;
+    }
 
     const validStatuses = ["Abierto", "En Proceso", "Resuelto"];
 

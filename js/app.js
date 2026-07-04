@@ -14,16 +14,22 @@ function startApp() {
     document.getElementById("app").classList.remove("hidden");
     renderSidebar();
     renderTopbar();
-    renderDashboard();
+    const canManage = typeof Storage !== "undefined" && (Storage.isTecnico() || Storage.isAdmin());
+    if (canManage) {
+        renderDashboard();
+    } else {
+        renderIncidents();
+    }
 }
 
 function renderSidebar() {
+    const canManage = typeof Storage !== "undefined" && (Storage.isTecnico() || Storage.isAdmin());
     document.getElementById("sidebar").className = "sidebar";
     document.getElementById("sidebar").innerHTML = `
         <div class="logo">ITSM</div>
         <div class="menu">
-            <button onclick="goDashboard()">Dashboard</button>
-            <button onclick="goIncidents()">Incidentes </button>
+            ${canManage ? `<button onclick="goDashboard()">Dashboard</button>` : ``}
+            <button onclick="goIncidents()">Incidentes</button>
             <button onclick="goKanban()">Kanban</button>
             <button onclick="logout()">Cerrar sesión</button>
         </div>
@@ -44,7 +50,12 @@ function renderTopbar() {
 }
 
 function goDashboard() {
-    renderDashboard();
+    const canManage = typeof Storage !== "undefined" && (Storage.isTecnico() || Storage.isAdmin());
+    if (canManage) {
+        renderDashboard();
+    } else {
+        renderIncidents();
+    }
 }
 
 function goIncidents() {

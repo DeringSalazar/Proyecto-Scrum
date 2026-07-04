@@ -48,13 +48,15 @@ function renderIncidents() {
                     <option>Baja</option>
                 </select>
 
+                ${canAssign ? `
                 <label>Asignar técnico</label>
-                <select id="incident-assigned" ${canAssign ? "" : "disabled"}>
+                <select id="incident-assigned">
                     <option>Sin Asignar</option>
                     <option>Carlos R. (Redes)</option>
                     <option>Diana M. (Sistemas)</option>
                     <option>Fabián T. (Soporte)</option>
                 </select>
+                ` : ""}
 
                 <label>Fecha del reporte</label>
                 <input 
