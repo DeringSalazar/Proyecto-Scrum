@@ -396,6 +396,11 @@ function getStatusClass(status) {
 
 function saveIncidentAction(text) {
 
+    if (typeof Storage !== "undefined" && Storage.addDashboardAction) {
+        Storage.addDashboardAction(text);
+        return;
+    }
+
     const actions = JSON.parse(localStorage.getItem("acciones_dashboard")) || [];
 
     const now = new Date();

@@ -18,13 +18,17 @@ function renderDashboard() {
 
     const sla = total > 0 ? Math.round((resueltos / total) * 100) : 0;
 
-    let acciones = JSON.parse(localStorage.getItem("acciones_dashboard")) || [
-        { texto: "Se arrastró INC-5 de Resuelto a Abierto", hora: "18:56" },
-        { texto: "Se arrastró INC-1 de En Proceso a Abierto", hora: "18:56" },
-        { texto: "Se actualizó INC-4: estado de Abierto a En Proceso", hora: "20:37" },
-        { texto: "Se devolvió INC-2 a Abierto / En Proceso", hora: "20:36" },
-        { texto: "Se devolvió INC-1 a Abierto / En Proceso", hora: "20:36" }
-    ];
+    let acciones = typeof Storage !== "undefined" && Storage.getDashboardActions ? Storage.getDashboardActions() : [];
+
+    if (acciones.length === 0) {
+        acciones = [
+            { texto: "Se arrastró INC-5 de Resuelto a Abierto", hora: "18:56" },
+            { texto: "Se arrastró INC-1 de En Proceso a Abierto", hora: "18:56" },
+            { texto: "Se actualizó INC-4: estado de Abierto a En Proceso", hora: "20:37" },
+            { texto: "Se devolvió INC-2 a Abierto / En Proceso", hora: "20:36" },
+            { texto: "Se devolvió INC-1 a Abierto / En Proceso", hora: "20:36" }
+        ];
+    }
 
     document.getElementById("dashboard").innerHTML = `
         <div class="dashboard-header">

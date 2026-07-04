@@ -1,17 +1,13 @@
 const Storage = {
-
     getCurrentUser() {
         return localStorage.getItem("usuario") || "cliente";
     },
-
     getCurrentUserName() {
         return localStorage.getItem("nombre") || "Cliente";
     },
-
     getCurrentUserRole() {
         return localStorage.getItem("rol") || "Cliente";
     },
-
     getCurrentUserSession() {
         return {
             usuario: this.getCurrentUser(),
@@ -23,42 +19,32 @@ const Storage = {
     isAdmin() {
         return this.getCurrentUserRole().toLowerCase().includes("admin");
     },
-
     isTecnico() {
         const rol = this.getCurrentUserRole().toLowerCase();
         return this.isAdmin() || rol.includes("técnico") || rol.includes("tecnico");
     },
 
     normalizeIncident(incident) {
-
         if (!incident) return incident;
-
         if (!incident.historial_estados) {
             incident.historial_estados = [];
         }
-
         if (!incident.notificaciones) {
             incident.notificaciones = [];
         }
-
         if (!incident.reportadoPor) {
             incident.reportadoPor = "Cliente";
         }
-
         if (!incident.reportadoPorUsuario) {
             incident.reportadoPorUsuario = "cliente";
         }
-
         if (!incident.assigned) {
             incident.assigned = "Sin Asignar";
         }
-
         if (!incident.createdAt) {
             incident.createdAt = incident.date || new Date().toISOString();
         }
-
         return incident;
-
     },
 
     getIncidents() {
@@ -67,6 +53,28 @@ const Storage = {
 
     saveIncidents(incidents) {
         localStorage.setItem("incidents", JSON.stringify((incidents || []).map(incident => this.normalizeIncident(incident))));
+    },
+
+    getDashboardActions() {
+        return JSON.parse(localStorage.getItem("acciones_dashboard")) || [];
+    },
+
+    saveDashboardActions(actions) {
+        localStorage.setItem("acciones_dashboard", JSON.stringify(actions || []));
+    },
+
+    addDashboardAction(text) {
+        const actions = this.getDashboardActions();
+        const now = new Date();
+        const hour = String(now.getHours()).padStart(2, "0");
+        const minute = String(now.getMinutes()).padStart(2, "0");
+
+        actions.unshift({
+            texto: text,
+            hora: `${hour}:${minute}`
+        });
+
+        this.saveDashboardActions(actions.slice(0, 5));
     },
 
     ensureSeedIncidents() {
@@ -410,15 +418,25 @@ const Storage = {
 
     },
 
-    login() {
+    login(userInfo) {
+
+        if (!userInfo) {
+            return;
+        }
 
         localStorage.setItem("logged", "true");
+        localStorage.setItem("usuario", userInfo.usuario || "cliente");
+        localStorage.setItem("rol", userInfo.rol || "Cliente");
+        localStorage.setItem("nombre", userInfo.nombre || "Cliente");
 
     },
 
     logout() {
 
         localStorage.removeItem("logged");
+        localStorage.removeItem("usuario");
+        localStorage.removeItem("rol");
+        localStorage.removeItem("nombre");
 
     }
 

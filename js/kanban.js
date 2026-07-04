@@ -459,7 +459,7 @@ function deleteIncidentFromKanban(id) {
 
 function saveKanbanIncidents(incidents) {
 
-    if (Storage.saveIncidents) {
+    if (typeof Storage !== "undefined" && Storage.saveIncidents) {
         Storage.saveIncidents(incidents);
         return;
     }
@@ -488,6 +488,13 @@ function getKanbanBorderClass(status) {
 
 function saveKanbanAction(id, newStatus) {
 
+    const actionText = `Se actualizó ${id}: estado a ${newStatus}`;
+
+    if (typeof Storage !== "undefined" && Storage.addDashboardAction) {
+        Storage.addDashboardAction(actionText);
+        return;
+    }
+
     const actions = JSON.parse(localStorage.getItem("acciones_dashboard")) || [];
 
     const now = new Date();
@@ -496,7 +503,7 @@ function saveKanbanAction(id, newStatus) {
     const minute = String(now.getMinutes()).padStart(2, "0");
 
     actions.unshift({
-        texto: `Se actualizó ${id}: estado a ${newStatus}`,
+        texto: actionText,
         hora: `${hour}:${minute}`
     });
 

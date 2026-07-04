@@ -98,10 +98,14 @@ function login() {
 
     if (usuarioEncontrado) {
 
-        localStorage.setItem("logged", "true");
-        localStorage.setItem("usuario", usuarioEncontrado.usuario);
-        localStorage.setItem("rol", usuarioEncontrado.rol);
-        localStorage.setItem("nombre", usuarioEncontrado.nombre);
+        if (typeof Storage !== "undefined" && Storage.login) {
+            Storage.login(usuarioEncontrado);
+        } else {
+            localStorage.setItem("logged", "true");
+            localStorage.setItem("usuario", usuarioEncontrado.usuario);
+            localStorage.setItem("rol", usuarioEncontrado.rol);
+            localStorage.setItem("nombre", usuarioEncontrado.nombre);
+        }
 
         startApp();
 
@@ -117,10 +121,14 @@ function login() {
 
 function logout() {
 
-    localStorage.removeItem("logged");
-    localStorage.removeItem("usuario");
-    localStorage.removeItem("rol");
-    localStorage.removeItem("nombre");
+    if (typeof Storage !== "undefined" && Storage.logout) {
+        Storage.logout();
+    } else {
+        localStorage.removeItem("logged");
+        localStorage.removeItem("usuario");
+        localStorage.removeItem("rol");
+        localStorage.removeItem("nombre");
+    }
 
     location.reload();
 
