@@ -1,8 +1,10 @@
+let currentIncidentView = "todos";
+
 function renderIncidents() {
 
     Storage.ensureSeedIncidents();
 
-    const incidents = Storage.getVisibleIncidentsForCurrentUser();
+    const incidents = getIncidentsByCurrentView();
     const canAssign = Storage.isTecnico() || Storage.isAdmin();
 
     document.getElementById("incidents").innerHTML = `
@@ -49,13 +51,13 @@ function renderIncidents() {
                 </select>
 
                 ${canAssign ? `
-                <label>Asignar técnico</label>
-                <select id="incident-assigned">
-                    <option>Sin Asignar</option>
-                    <option>Carlos R. (Redes)</option>
-                    <option>Diana M. (Sistemas)</option>
-                    <option>Fabián T. (Soporte)</option>
-                </select>
+                    <label>Asignar técnico</label>
+                    <select id="incident-assigned">
+                        <option>Sin Asignar</option>
+                        <option>Carlos R. (Redes)</option>
+                        <option>Diana M. (Sistemas)</option>
+                        <option>Fabián T. (Soporte)</option>
+                    </select>
                 ` : ""}
 
                 <label>Fecha del reporte</label>
@@ -72,6 +74,8 @@ function renderIncidents() {
             </div>
 
             <div class="incident-table-section">
+
+                ${renderTechnicianTableTabs()}
 
                 <div class="incident-filters">
 
@@ -137,13 +141,122 @@ function renderIncidents() {
     document.getElementById("kanban").style.display = "none";
 }
 
+
+
+function renderTechnicianTableTabs() {
+
+    if (!Storage.isTecnico()) {
+        return "";
+    }
+
+    return `
+        <div class="incident-view-tabs">
+
+            <button 
+                class="${currentIncidentView === "todos" ? "active" : ""}"
+                onclick="changeIncidentView('todos')"
+            >
+                Todos
+            </button>
+
+            <button 
+                class="${currentIncidentView === "pendientes" ? "active" : ""}"
+                onclick="changeIncidentView('pendientes')"
+            >
+                Cola de pendientes
+            </button>
+
+            <button 
+                class="${currentIncidentView === "mis-asignaciones" ? "active" : ""}"
+                onclick="changeIncidentView('mis-asignaciones')"
+            >
+                Mis asignaciones
+            </button>
+
+        </div>
+    `;
+}
+
+function changeIncidentView(view) {
+
+    currentIncidentView = view;
+
+    const searchInput = document.getElementById("search-incident");
+    const statusFilter = document.getElementById("filter-status");
+    const priorityFilter = document.getElementById("filter-priority");
+
+    if (searchInput) {
+        searchInput.value = "";
+    }
+
+    if (statusFilter) {
+        statusFilter.value = "";
+    }
+
+    if (priorityFilter) {
+        priorityFilter.value = "";
+    }
+
+    renderIncidents();
+}
+
+function getIncidentsByCurrentView() {
+
+    let incidents = Storage.getVisibleIncidentsForCurrentUser();
+
+    if (!Storage.isTecnico()) {
+        return incidents;
+    }
+
+    if (currentIncidentView === "pendientes") {
+        incidents = Storage.getIncidents().filter(incident => {
+            return !incident.assigned || incident.assigned === "Sin Asignar";
+        });
+    }
+
+    if (currentIncidentView === "mis-asignaciones") {
+        const currentTechName = getCurrentTechnicianName();
+
+        incidents = Storage.getIncidents().filter(incident => {
+            return incident.assigned === currentTechName;
+        });
+    }
+
+    return incidents;
+}
+
+function getCurrentTechnicianName() {
+
+    const currentUser = Storage.getCurrentUserSession
+        ? Storage.getCurrentUserSession()
+        : null;
+
+    if (!currentUser) {
+        return "Técnico TI";
+    }
+
+    return currentUser.nombre || currentUser.name || currentUser.usuario || "Técnico TI";
+}
+
+
 function buildIncidentRows(incidents) {
 
     if (incidents.length === 0) {
+
+        let message = "No hay incidentes registrados.";
+
+        if (currentIncidentView === "pendientes") {
+            message = "No hay incidentes pendientes por asignar.";
+        }
+
+        if (currentIncidentView === "mis-asignaciones") {
+            message = "No tienes incidentes asignados actualmente.";
+        }
+
         return `
             <tr>
                 <td colspan="7" class="empty-table">
-                    No hay incidentes registrados.
+                    ${message}
                 </td>
             </tr>
         `;
@@ -173,7 +286,7 @@ function buildIncidentRows(incidents) {
             </td>
 
             <td>
-                ${incident.assigned}
+                ${incident.assigned || "Sin Asignar"}
             </td>
 
             <td>
@@ -205,10 +318,12 @@ function getIncidentActionButtons(incident) {
 
     return `
         <button class="btn-auto-assign" onclick="autoAssignIncident('${incident.id}')">
-            Auto asignarme
+            Asignarme
         </button>
     `;
 }
+
+
 
 function addIncident() {
 
@@ -216,7 +331,6 @@ function addIncident() {
     const description = document.getElementById("incident-description").value.trim();
     const type = document.getElementById("incident-type").value;
     const priority = document.getElementById("incident-priority").value;
-    const assignedField = document.getElementById("incident-assigned");
     const date = document.getElementById("incident-date").value;
 
     if (title === "" || description === "") {
@@ -229,9 +343,15 @@ function addIncident() {
         return;
     }
 
-    const currentUser = Storage.getCurrentUserSession();
+    const currentUser = Storage.getCurrentUserSession
+        ? Storage.getCurrentUserSession()
+        : {
+            nombre: "Usuario",
+            usuario: "usuario"
+        };
 
     const canAssign = Storage.isTecnico() || Storage.isAdmin();
+    const assignedField = document.getElementById("incident-assigned");
 
     const newIncident = {
         id: getNextIncidentId(),
@@ -239,7 +359,7 @@ function addIncident() {
         description: description,
         type: type,
         priority: priority,
-        assigned: canAssign ? assignedField.value : "Sin Asignar",
+        assigned: canAssign && assignedField ? assignedField.value : "Sin Asignar",
         status: "Abierto",
         date: date,
         reportadoPor: currentUser.nombre,
@@ -259,21 +379,66 @@ function addIncident() {
     renderIncidents();
 }
 
+
 function autoAssignIncident(id) {
 
-    const result = Storage.patchIncidentAsignar(id);
+    const incidents = Storage.getIncidents();
 
-    if (!result.success) {
-        showToast(result.message, "error");
+    const incident = incidents.find(item => item.id === id);
+
+    if (!incident) {
+        showToast("No se encontró el incidente.", "error");
         return;
     }
 
-    saveIncidentAction(`Se asignó el incidente ${id}`);
+    if (incident.assigned && incident.assigned !== "Sin Asignar") {
+        showToast("Este incidente ya está asignado.", "error");
+        return;
+    }
 
-    showToast(result.message);
+    if (Storage.patchIncidentAsignar) {
+
+        const result = Storage.patchIncidentAsignar(id);
+
+        if (!result.success) {
+            showToast(result.message, "error");
+            return;
+        }
+
+        saveIncidentAction(`Se asignó el incidente ${id}`);
+
+        showToast(result.message || "Incidente asignado correctamente.");
+
+        renderIncidents();
+
+        return;
+    }
+
+    const currentTechName = getCurrentTechnicianName();
+
+    const updatedIncidents = incidents.map(item => {
+
+        if (item.id === id) {
+            return {
+                ...item,
+                assigned: currentTechName,
+                status: item.status === "Abierto" ? "En Proceso" : item.status
+            };
+        }
+
+        return item;
+    });
+
+    saveIncidentsSafely(updatedIncidents);
+
+    saveIncidentAction(`Se asignó el incidente ${id} a ${currentTechName}`);
+
+    showToast("Incidente asignado correctamente.");
 
     renderIncidents();
 }
+
+
 
 function filterIncidents() {
 
@@ -281,7 +446,7 @@ function filterIncidents() {
     const status = document.getElementById("filter-status").value;
     const priority = document.getElementById("filter-priority").value;
 
-    let incidents = Storage.getVisibleIncidentsForCurrentUser();
+    let incidents = getIncidentsByCurrentView();
 
     incidents = incidents.filter(incident => {
 
@@ -320,12 +485,14 @@ function refreshIncidents() {
         priorityFilter.value = "";
     }
 
-    const incidents = Storage.getVisibleIncidentsForCurrentUser();
+    const incidents = getIncidentsByCurrentView();
 
     document.getElementById("incident-table-body").innerHTML = buildIncidentRows(incidents);
 
     showToast("Lista de incidentes actualizada.");
 }
+
+
 
 function getNextIncidentId() {
 
@@ -336,7 +503,7 @@ function getNextIncidentId() {
     }
 
     const numbers = incidents.map(incident => {
-        return parseInt(incident.id.replace("INC-", ""));
+        return parseInt(String(incident.id).replace("INC-", ""));
     });
 
     const maxNumber = Math.max(...numbers);
@@ -416,4 +583,14 @@ function saveIncidentAction(text) {
     });
 
     localStorage.setItem("acciones_dashboard", JSON.stringify(actions.slice(0, 5)));
+}
+
+function saveIncidentsSafely(incidents) {
+
+    if (Storage.saveIncidents) {
+        Storage.saveIncidents(incidents);
+        return;
+    }
+
+    localStorage.setItem("incidents", JSON.stringify(incidents));
 }
