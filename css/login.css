@@ -169,3 +169,121 @@
     display:block;
 
 }
+
+/* ==========================================
+   ESTILOS PARA RECUPERACIÓN DE CONTRASEÑA
+   ========================================== */
+
+.login-success {
+    display: none;
+    background: #d1fae5;
+    color: #065f46;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    text-align: center;
+    font-size: 14px;
+    border-left: 4px solid #10b981;
+}
+
+.login-success.show {
+    display: block;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-footer-links {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.link-back {
+    color: #0066cc;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    transition: 0.25s;
+}
+
+.link-back:hover {
+    text-decoration: underline;
+    color: #0053aa;
+}
+
+.security-hint {
+    background: #f0f9ff;
+    border-left: 4px solid #0066cc;
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 6px;
+    color: #0c4a6e;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.password-requirements {
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    padding: 12px;
+    margin-bottom: 18px;
+    border-radius: 6px;
+    color: #92400e;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.password-requirements strong {
+    display: block;
+    margin-bottom: 6px;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 15px;
+    background: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+    margin-bottom: 15px;
+}
+
+.btn-primary:hover {
+    background: #0053aa;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0, 102, 204, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+.forgot-password-link {
+    text-align: center;
+    margin-top: 15px;
+}
+
+.forgot-password-link a {
+    color: #0066cc;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.25s;
+}
+
+.forgot-password-link a:hover {
+    text-decoration: underline;
+}

@@ -264,7 +264,7 @@ function buildIncidentRows(incidents) {
 
     return incidents.map(incident => `
 
-        <tr>
+        <tr onclick="openIncidentDetail('${incident.id}')" style="cursor: pointer; transition: 0.25s;" onmouseover="this.style.background='#f0f9ff';" onmouseout="this.style.background='';">
 
             <td class="incident-id">
                 ${incident.id}
@@ -295,7 +295,7 @@ function buildIncidentRows(incidents) {
                 </span>
             </td>
 
-            <td>
+            <td onclick="event.stopPropagation();">
                 ${getIncidentActionButtons(incident)}
             </td>
 

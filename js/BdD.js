@@ -438,6 +438,51 @@ const Storage = {
         localStorage.removeItem("rol");
         localStorage.removeItem("nombre");
 
+    },
+
+    // ==========================================
+    // MÉTODOS PARA GESTIÓN DE COMENTARIOS
+    // ==========================================
+
+    getIncidentById(incidentId) {
+        const incidents = this.getIncidents();
+        return incidents.find(i => i.id === incidentId);
+    },
+
+    getIncidentComments(incidentId) {
+        const comments = JSON.parse(localStorage.getItem(`comments_${incidentId}`)) || [];
+        // Ordenar por timestamp descendente (más recientes primero)
+        return comments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    },
+
+    addCommentToIncident(incidentId, comment) {
+        const comments = JSON.parse(localStorage.getItem(`comments_${incidentId}`)) || [];
+        comments.push(comment);
+        localStorage.setItem(`comments_${incidentId}`, JSON.stringify(comments));
+
+        // Registrar acción en dashboard
+        this.addDashboardAction(`Se agregó comentario a ${incidentId}`);
+    },
+
+    deleteCommentFromIncident(incidentId, commentId) {
+        const comments = JSON.parse(localStorage.getItem(`comments_${incidentId}`)) || [];
+        const filtered = comments.filter(c => c.id !== commentId);
+        localStorage.setItem(`comments_${incidentId}`, JSON.stringify(filtered));
+    },
+
+    updateIncident(incident) {
+        if (typeof incident === 'string') {
+            // Si es un string, es el ID - llamada antigua
+            return;
+        }
+
+        const incidents = this.getIncidents();
+        const index = incidents.findIndex(i => i.id === incident.id);
+        
+        if (index !== -1) {
+            incidents[index] = this.normalizeIncident({...incidents[index], ...incident});
+            this.saveIncidents(incidents);
+        }
     }
 
 };

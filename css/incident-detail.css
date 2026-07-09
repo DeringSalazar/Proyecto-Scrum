@@ -1,0 +1,463 @@
+/* ==========================================
+   ESTILOS PARA MODAL DE DETALLE DE INCIDENTE
+   CON COMENTARIOS Y NOTAS
+   ========================================== */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.modal-overlay.active {
+    display: flex;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    max-width: 900px;
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.incident-detail-modal {
+    margin: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 30px;
+    border-bottom: 1px solid #e5e7eb;
+    background: linear-gradient(135deg, #f8fafc 0%, #f0f9ff 100%);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.modal-header h2 {
+    font-size: 22px;
+    color: #1f2937;
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #6b7280;
+    cursor: pointer;
+    transition: 0.25s;
+    padding: 0;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+}
+
+.modal-close:hover {
+    background: rgba(0, 0, 0, 0.1);
+    color: #1f2937;
+}
+
+.modal-body {
+    padding: 30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+@media (max-width: 768px) {
+    .modal-body {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==========================================
+   SECCIÓN DE INFORMACIÓN DEL INCIDENTE
+   ========================================== */
+
+.incident-info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.incident-info-section h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 10px;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.info-item label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-item span {
+    font-size: 14px;
+    color: #1f2937;
+    font-weight: 500;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    width: fit-content;
+}
+
+.status-badge.status-abierto {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.status-badge.status-en-proceso {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-badge.status-resuelto {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.priority-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    width: fit-content;
+}
+
+.priority-badge.priority-crítica {
+    background: #fecaca;
+    color: #7f1d1d;
+}
+
+.priority-badge.priority-alta {
+    background: #fed7aa;
+    color: #7c2d12;
+}
+
+.priority-badge.priority-media {
+    background: #fde047;
+    color: #713f12;
+}
+
+.priority-badge.priority-baja {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.description-section {
+    background: #f9fafb;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #0066cc;
+}
+
+.description-section label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.description-section p {
+    color: #1f2937;
+    line-height: 1.6;
+    font-size: 14px;
+}
+
+.incident-actions {
+    background: #f0f9ff;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #bfdbfe;
+}
+
+.incident-actions label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #0c4a6e;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.status-btn {
+    flex: 1;
+    padding: 10px;
+    background: white;
+    border: 2px solid #0066cc;
+    color: #0066cc;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.25s;
+    font-size: 13px;
+}
+
+.status-btn:hover {
+    background: #0066cc;
+    color: white;
+}
+
+/* ==========================================
+   SECCIÓN DE COMENTARIOS
+   ========================================== */
+
+.comments-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-left: 1px solid #e5e7eb;
+    padding-left: 30px;
+}
+
+.comments-section h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 768px) {
+    .comments-section {
+        border-left: none;
+        padding-left: 0;
+    }
+}
+
+.comment-form {
+    background: #f9fafb;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.comment-form h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 12px;
+}
+
+.comment-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    resize: vertical;
+    transition: 0.25s;
+}
+
+.comment-input:focus {
+    outline: none;
+    border-color: #0066cc;
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+.btn-add-comment {
+    width: 100%;
+    padding: 12px;
+    background: #0066cc;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.25s;
+    margin-top: 12px;
+}
+
+.btn-add-comment:hover {
+    background: #0053aa;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+}
+
+.btn-add-comment:active {
+    transform: translateY(0);
+}
+
+.comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.comments-list h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1f2937;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.no-comments {
+    text-align: center;
+    color: #9ca3af;
+    font-size: 14px;
+    padding: 20px;
+    background: #f9fafb;
+    border-radius: 8px;
+    border: 1px dashed #e5e7eb;
+}
+
+.comment-item {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 15px;
+    transition: 0.25s;
+}
+
+.comment-item:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: #bfdbfe;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    gap: 10px;
+}
+
+.comment-author {
+    color: #0066cc;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.comment-date {
+    color: #9ca3af;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.comment-text {
+    color: #1f2937;
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 10px 0;
+    word-wrap: break-word;
+}
+
+.comment-delete {
+    background: none;
+    border: none;
+    color: #dc2626;
+    cursor: pointer;
+    font-size: 12px;
+    text-decoration: underline;
+    transition: 0.25s;
+    padding: 4px 0;
+    margin-top: 8px;
+}
+
+.comment-delete:hover {
+    color: #b91c1c;
+}
+
+/* ==========================================
+   RESPONSIVE
+   ========================================== */
+
+@media (max-width: 600px) {
+    .modal-header {
+        padding: 20px;
+    }
+
+    .modal-header h2 {
+        font-size: 18px;
+    }
+
+    .modal-body {
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .comment-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
