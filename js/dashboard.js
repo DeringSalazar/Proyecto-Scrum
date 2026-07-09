@@ -113,4 +113,6 @@ function renderDashboard() {
     document.getElementById("dashboard").style.display = "block";
     document.getElementById("incidents").style.display = "none";
     document.getElementById("kanban").style.display = "none";
+    document.getElementById("users").style.display = "none";
+    document.getElementById("reports").style.display = "none";
 }

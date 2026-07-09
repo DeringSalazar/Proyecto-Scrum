@@ -483,6 +483,173 @@ const Storage = {
             incidents[index] = this.normalizeIncident({...incidents[index], ...incident});
             this.saveIncidents(incidents);
         }
+    },
+
+    // ==========================================
+    // MÉTODOS PARA GESTIÓN DE USUARIOS
+    // ==========================================
+
+    ensureSeedUsers() {
+        const users = this.getUsers();
+        if (users.length > 0) {
+            return users;
+        }
+
+        const seedUsers = [
+            {
+                id: 1,
+                nombre: "Administrador",
+                correo: "admin@itsm.com",
+                usuario: "admin",
+                password: "123",
+                rol: "Administrador",
+                estado: "Activo",
+                fecha_creacion: "2026-01-15T10:30:00"
+            },
+            {
+                id: 2,
+                nombre: "Carlos R. (Redes)",
+                correo: "carlos@itsm.com",
+                usuario: "carlos",
+                password: "123",
+                rol: "Técnico de TI",
+                estado: "Activo",
+                fecha_creacion: "2026-01-15T10:30:00"
+            },
+            {
+                id: 3,
+                nombre: "Diana M. (Sistemas)",
+                correo: "diana@itsm.com",
+                usuario: "diana",
+                password: "123",
+                rol: "Técnico de TI",
+                estado: "Activo",
+                fecha_creacion: "2026-01-15T10:30:00"
+            },
+            {
+                id: 4,
+                nombre: "Fabián T. (Soporte)",
+                correo: "fabian@itsm.com",
+                usuario: "fabian",
+                password: "123",
+                rol: "Técnico de TI",
+                estado: "Activo",
+                fecha_creacion: "2026-01-15T10:30:00"
+            },
+            {
+                id: 5,
+                nombre: "Cliente",
+                correo: "cliente@itsm.com",
+                usuario: "cliente",
+                password: "123",
+                rol: "Cliente",
+                estado: "Activo",
+                fecha_creacion: "2026-01-15T10:30:00"
+            }
+        ];
+
+        this.saveUsers(seedUsers);
+        return this.getUsers();
+    },
+
+    getUsers() {
+        return JSON.parse(localStorage.getItem("users")) || [];
+    },
+
+    saveUsers(users) {
+        localStorage.setItem("users", JSON.stringify(users || []));
+    },
+
+    addUser(user) {
+        if (!user.nombre || !user.correo || !user.usuario || !user.password || !user.rol) {
+            return { success: false, message: "Faltan campos obligatorios" };
+        }
+
+        const users = this.getUsers();
+        
+        if (users.find(u => u.usuario === user.usuario.toLowerCase())) {
+            return { success: false, message: "El usuario ya existe" };
+        }
+
+        if (users.find(u => u.correo === user.correo.toLowerCase())) {
+            return { success: false, message: "El correo ya está registrado" };
+        }
+
+        const newUser = {
+            id: users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1,
+            nombre: user.nombre,
+            correo: user.correo.toLowerCase(),
+            usuario: user.usuario.toLowerCase(),
+            password: user.password,
+            rol: user.rol,
+            estado: user.estado || "Activo",
+            fecha_creacion: new Date().toISOString()
+        };
+
+        users.push(newUser);
+        this.saveUsers(users);
+        return { success: true, message: "Usuario creado exitosamente", user: newUser };
+    },
+
+    getUserById(id) {
+        const users = this.getUsers();
+        return users.find(u => u.id === parseInt(id));
+    },
+
+    updateUser(id, data) {
+        const users = this.getUsers();
+        const index = users.findIndex(u => u.id === parseInt(id));
+
+        if (index === -1) {
+            return { success: false, message: "Usuario no encontrado" };
+        }
+
+        const userToUpdate = users[index];
+
+        if (data.correo && data.correo !== userToUpdate.correo) {
+            if (users.find(u => u.id !== parseInt(id) && u.correo === data.correo.toLowerCase())) {
+                return { success: false, message: "El correo ya está registrado" };
+            }
+        }
+
+        users[index] = {
+            ...userToUpdate,
+            nombre: data.nombre || userToUpdate.nombre,
+            correo: data.correo ? data.correo.toLowerCase() : userToUpdate.correo,
+            rol: data.rol || userToUpdate.rol,
+            estado: data.estado !== undefined ? data.estado : userToUpdate.estado,
+            password: data.password || userToUpdate.password
+        };
+
+        this.saveUsers(users);
+        return { success: true, message: "Usuario actualizado exitosamente", user: users[index] };
+    },
+
+    toggleUserStatus(id) {
+        const users = this.getUsers();
+        const index = users.findIndex(u => u.id === parseInt(id));
+
+        if (index === -1) {
+            return { success: false, message: "Usuario no encontrado" };
+        }
+
+        const nuevoEstado = users[index].estado === "Activo" ? "Inactivo" : "Activo";
+        users[index].estado = nuevoEstado;
+
+        this.saveUsers(users);
+        return { success: true, message: `Usuario ${nuevoEstado.toLowerCase()}`, user: users[index] };
+    },
+
+    searchUsers(query) {
+        const users = this.getUsers();
+        const lowerQuery = query.toLowerCase();
+
+        return users.filter(u =>
+            u.nombre.toLowerCase().includes(lowerQuery) ||
+            u.correo.toLowerCase().includes(lowerQuery) ||
+            u.usuario.toLowerCase().includes(lowerQuery) ||
+            u.rol.toLowerCase().includes(lowerQuery)
+        );
     }
 
 };

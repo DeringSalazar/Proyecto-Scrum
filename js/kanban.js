@@ -32,6 +32,8 @@ function renderKanban() {
     document.getElementById("dashboard").style.display = "none";
     document.getElementById("incidents").style.display = "none";
     document.getElementById("kanban").style.display = "block";
+    document.getElementById("users").style.display = "none";
+    document.getElementById("reports").style.display = "none";
 }
 
 function buildKanbanColumn(status, title, incidents, canManage) {

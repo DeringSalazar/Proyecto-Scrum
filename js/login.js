@@ -91,6 +91,8 @@ function login() {
     ];
 
     let usuarioEncontrado = null;
+    
+    // Buscar en usuarios por defecto
     const defaultUser = defaultUsuarios.find(item => item.usuario === usuario);
 
     if (defaultUser) {
@@ -102,6 +104,20 @@ function login() {
                 usuario: defaultUser.usuario,
                 rol: defaultUser.rol,
                 nombre: defaultUser.nombre
+            };
+        }
+    }
+
+    // Si no encontró en usuarios por defecto, buscar en usuarios guardados
+    if (!usuarioEncontrado && typeof Storage !== "undefined" && Storage.getUsers) {
+        const allUsers = Storage.getUsers();
+        const savedUser = allUsers.find(u => u.usuario === usuario && u.password === password && u.estado === "Activo");
+        
+        if (savedUser) {
+            usuarioEncontrado = {
+                usuario: savedUser.usuario,
+                rol: savedUser.rol,
+                nombre: savedUser.nombre
             };
         }
     }

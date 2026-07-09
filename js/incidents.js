@@ -139,6 +139,8 @@ function renderIncidents() {
     document.getElementById("dashboard").style.display = "none";
     document.getElementById("incidents").style.display = "block";
     document.getElementById("kanban").style.display = "none";
+    document.getElementById("users").style.display = "none";
+    document.getElementById("reports").style.display = "none";
 }
 
 
