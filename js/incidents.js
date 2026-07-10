@@ -320,7 +320,7 @@ function getIncidentActionButtons(incident) {
 
     return `
         <button class="btn-auto-assign" onclick="autoAssignIncident('${incident.id}')">
-            Asignarme
+            Autoasignarme
         </button>
     `;
 }
@@ -596,3 +596,4 @@ function saveIncidentsSafely(incidents) {
 
     localStorage.setItem("incidents", JSON.stringify(incidents));
 }
+

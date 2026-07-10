@@ -104,10 +104,13 @@ function renderReports() {
 
                 <div class="reports-actions">
                     <button class="btn-action-report" onclick="exportToCSV()">
-                        📊 Exportar CSV
+                        <span class="material-symbols-rounded">download</span>
+                        Exportar CSV
                     </button>
+
                     <button class="btn-action-report" onclick="printReport()">
-                        🖨️ Imprimir
+                        <span class="material-symbols-rounded">print</span>
+                        Imprimir
                     </button>
                 </div>
 

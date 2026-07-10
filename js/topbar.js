@@ -7,7 +7,7 @@ function renderTopbar() {
         : (localStorage.getItem("rol") || "Usuario");
     topbar.innerHTML = `
         <h2>
-            ITSM Service Desk
+            Operación de servicios TI
         </h2>
         <div class="user">
             ${rol}

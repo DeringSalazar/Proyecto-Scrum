@@ -1,0 +1,70 @@
+.sidebar{
+    width:240px;
+    min-width:240px;
+    height:100vh;
+    position:fixed;
+    top:0;
+    left:0;
+    display:flex;
+    flex-direction:column;
+    background:#111622;
+    border-right:1px solid rgba(0,136,255,.35);
+    box-shadow:0 0 35px rgba(0,136,255,.18),8px 0 35px rgba(0,0,0,.45);
+    z-index:999;
+}
+
+.logo{
+    padding:35px 20px;
+    text-align:center;
+    color:#fff;
+    font-size:38px;
+    font-weight:800;
+    letter-spacing:1px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    text-shadow:0 0 15px rgba(0,136,255,.55);
+}
+
+.menu{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    padding:25px 15px;
+}
+
+.menu button{
+    width:100%;
+    padding:16px 20px;
+    background:transparent;
+    border:none;
+    border-radius:12px;
+    color:rgba(255,255,255,.78);
+    text-align:left;
+    font-size:17px;
+    font-weight:600;
+    letter-spacing:.3px;
+    cursor:pointer;
+    transition:all .25s ease;
+}
+
+.menu button:hover{
+    background:rgba(0,136,255,.12);
+    color:#fff;
+    transform:translateX(6px);
+    box-shadow:inset 4px 0 #0088ff,0 0 18px rgba(0,136,255,.28);
+}
+
+.menu button:active{
+    transform:translateX(2px);
+}
+
+.menu button:last-child{
+    margin-top:auto;
+    color:#ff9d9d;
+}
+
+.menu button:last-child:hover{
+    background:rgba(239,68,68,.15);
+    color:#fff;
+    box-shadow:inset 4px 0 #ef4444;
+}
