@@ -4,20 +4,27 @@ window.onload = () => {
     } else {
         renderLogin();
     }
+
 };
 
 function startApp() {
     if (typeof Storage !== "undefined" && Storage.ensureSeedIncidents) {
         Storage.ensureSeedIncidents();
     }
+
     if (typeof Storage !== "undefined" && Storage.ensureSeedUsers) {
         Storage.ensureSeedUsers();
     }
+
     document.getElementById("login-screen").classList.add("hidden");
     document.getElementById("app").classList.remove("hidden");
+
     renderSidebar();
     renderTopbar();
-    const canManage = typeof Storage !== "undefined" && (Storage.isTecnico() || Storage.isAdmin());
+
+    const canManage = typeof Storage !== "undefined" &&
+        (Storage.isTecnico() || Storage.isAdmin());
+
     if (canManage) {
         renderDashboard();
     } else {
@@ -25,37 +32,10 @@ function startApp() {
     }
 }
 
-function renderSidebar() {
-    const canManage = typeof Storage !== "undefined" && (Storage.isTecnico() || Storage.isAdmin());
-    document.getElementById("sidebar").className = "sidebar";
-    document.getElementById("sidebar").innerHTML = `
-        <div class="logo">ITSM</div>
-        <div class="menu">
-            ${canManage ? `<button onclick="goDashboard()">Dashboard</button>` : ``}
-            <button onclick="goIncidents()">Incidentes</button>
-            <button onclick="goKanban()">Kanban</button>
-            ${canManage ? `<button onclick="goUsers()">Usuarios</button>` : ``}
-            <button onclick="goReports()">Reportes</button>
-            <button onclick="logout()">Cerrar sesión</button>
-        </div>
-    `;
-}
-
-function renderTopbar() {
-    document.getElementById("topbar").className = "topbar";
-    const rol = typeof Storage !== "undefined" && Storage.getCurrentUserRole ? Storage.getCurrentUserRole() : (localStorage.getItem("rol") || "Usuario");
-    document.getElementById("topbar").innerHTML = `
-        <h2>
-            ITSM Service Desk
-        </h2>
-        <div class="user">
-            ${rol}
-        </div>
-    `;
-}
-
+// NAVEGACIÓN DEL SIDEBAR
 function goDashboard() {
-    const canManage = typeof Storage !== "undefined" && (Storage.isTecnico() || Storage.isAdmin());
+    const canManage = typeof Storage !== "undefined" &&
+        (Storage.isTecnico() || Storage.isAdmin());
     if (canManage) {
         renderDashboard();
     } else {
